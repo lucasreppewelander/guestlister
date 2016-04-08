@@ -4,8 +4,11 @@ var http = require('http');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var debug = require('debug')('guestlist:server');
+var debug = require('debug')('guestlist:server'),
+    session = require('express-session');
+var MongoStore = require('connect-mongo/es5')(session);
 var lusca = require('lusca');
+var passport = require('passport');
 var dotenv = require('dotenv');
 var multer = require('multer');
 var bodyParser = require('body-parser'),
@@ -26,7 +29,7 @@ var app = express();
 var server = http.Server(app);
 var io = require('socket.io')(http);
 
-mongoose.connect('mongodb://admin:admin@ds013270.mlab.com:13270/guestlister');
+mongoose.connect(process.env.MONGODB || process.env.MONGOLAB_URI);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -44,8 +47,17 @@ app.set('port', port);
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET,
+  store: new MongoStore({
+    url: process.env.MONGODB || process.env.MONGOLAB_URI,
+    autoReconnect: true
+  })
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(function(req, res, next) {

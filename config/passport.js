@@ -8,7 +8,7 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 var GitHubStrategy = require('passport-github').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
-var User = require('../models/user);
+var User = require('../models/user');
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
