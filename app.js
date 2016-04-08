@@ -5,13 +5,22 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var debug = require('debug')('guestlist:server');
+var lusca = require('lusca');
+var dotenv = require('dotenv');
+var multer = require('multer');
 var bodyParser = require('body-parser'),
     mongoose = require('mongoose');
+
+var upload = multer({ dest: path.join(__dirname, 'uploads') });
+dotenv.load({ path: '.env' });
 
 /* routes */
 var routes = require('./routes/index'),
     users = require('./routes/users'),
-    guestlist = require('./routes/guestlist');
+    guestlist = require('./routes/guestlist'),
+    auth = require('./routes/auth');
+
+var passportConfig = require('./config/passport');
 
 var app = express();
 var server = http.Server(app);
@@ -37,12 +46,35 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(function(req, res, next) {
+  if (req.path === '/api/upload') {
+    next();
+  } else {
+    lusca.csrf()(req, res, next);
+  }
+});
+app.use(lusca.xframe('SAMEORIGIN'));
+app.use(lusca.xssProtection(true));
+app.use(function(req, res, next) {
+  res.locals.user = req.user;
+  next();
+});
+app.use(function(req, res, next) {
+  // After successful login, redirect back to /api, /contact or /
+  if (/(api)|(contact)|(^\/$)/i.test(req.path)) {
+    req.session.returnTo = req.path;
+  }
+  next();
+});
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/guestlist', guestlist);
+app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
