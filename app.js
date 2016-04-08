@@ -3,6 +3,7 @@ var path = require('path');
 var http = require('http');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var errorHandler = require('errorhandler');
 var cookieParser = require('cookie-parser');
 var debug = require('debug')('guestlist:server'),
     session = require('express-session');
@@ -14,7 +15,7 @@ var multer = require('multer');
 var bodyParser = require('body-parser'),
     mongoose = require('mongoose');
 
-var upload = multer({ dest: path.join(__dirname, 'uploads') });
+var upload = multer({ dest: path.join(__dirname, 'public/uploads') });
 dotenv.load({ path: '.env' });
 
 /* routes */
@@ -22,8 +23,6 @@ var routes = require('./routes/index'),
     users = require('./routes/users'),
     guestlist = require('./routes/guestlist'),
     auth = require('./routes/auth');
-
-var passportConfig = require('./config/passport');
 
 var app = express();
 var server = http.Server(app);
@@ -176,5 +175,6 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
+app.use(errorHandler());
 
 module.exports = app;

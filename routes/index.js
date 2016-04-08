@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var passportConfig = require('../config/passport');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Guestlister - a smart guestlist app' });
@@ -248,6 +250,12 @@ router.post('/signup', function(req, res, next) {
         res.redirect('/');
       });
     });
+  });
+});
+
+router.get('/account', passportConfig.isAuthenticated, function(req, res) {
+  res.render('account/profile', {
+    title: 'Account Management'
   });
 });
 
