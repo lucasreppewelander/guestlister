@@ -2,8 +2,30 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
+  body(ng-app='guestlister')
+    .header
+      .logo
+        span.site-name Guestlistr
+        span.site-slogan The smart guestlist handler
+      ul
+        li: a(href='/') Home
+        li: a(href='/user-cases') Use cases
+        li: a(href='/about') About
+        li: a(href='/contact') Contact
+        if !user
+          li: a(href='/login') Login
+          li: a(href='/signup') Register an account
+        else
+          li: a(href='/profile') #{user.email}
+      
+      if user
+        ul
+          li: a(href='/guestlist') Guestlists
     block content
     script(src="/socket.io/socket.io.js")
     script(src="/javascripts/io.js")
+    script(src='/bower_components/angular/angular.js')
+    script(src='/controllers/guestlist.js')
+    block footer

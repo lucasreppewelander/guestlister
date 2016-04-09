@@ -1,8 +1,10 @@
 var mongoose = require('mongoose');
 
-var guestlistSchema = mongoose.Schema({
-    title: String
-});
+var guestlistSchema = new mongoose.Schema({
+  name: { type: String, unique: true },
+  date: { type: Date },
+  owner: mongoose.Schema.ObjectId
+}, { timestamps: true });
 
 var Guestlist = mongoose.model('Guestlist', guestlistSchema);
-exports.add = Guestlist;
+module.exports = Guestlist;

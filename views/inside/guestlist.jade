@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  h1 Guestlists
+  .row(ng-controller='myGuestlists')
+    .col-sm-6
+      h4 My guestlists
+      .spinner(ng-show='loading')
+      ul
+        li(ng-repeat='list in mylists')
+          a(href='/guestlist/{{ list._id }}')
+            span.name {{ list.name }}
+            span.date {{ list.date.start }}
+    .col-sm-6
+      h4 Create new guestlist
+      div#messages(ng-show="message") {{ message }}
+      form
+        .form-group(ng-class="{ 'has-error' : errorName }")
+          label(for='name') The events name
+          input.form-control(type='text', name='name', id='name', placeholder='Name', ng-model='fd.name')
+          span(class="help-block", ng-show="errorName") {{ errorName }}
+        .form-group(ng-class="{ 'has-error' : errorDate }")
+          label(for='date') Date & time of event
+          input.form-control(type='datetime', name='date', id='date', placeholder='Date', ng-model='fd.date')
+          span(class="help-block", ng-show="errorDate") {{ errorDate }}
+        .form-group
+          .spinner.icon-spinner.icon-spin.icon-large(ng-show='loading')
+          input.btn.btn-submit.btn-primary(type='submit', value='Create', ng-click='processForm()')
+      {{ fd }}
