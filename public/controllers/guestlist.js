@@ -1,11 +1,17 @@
 
-var p = angular.module('guestlister', []);
+var p = angular.module('guestlister', ['ngRoute'])
+.config(function ($routeProvider) {
+  // configure the routing rules here
+  $routeProvider.when('/guestlist/:id', {
+      controller: 'attendees'
+  });
+});
 
 p.controller('myGuestlists', ['$scope', '$http', function($scope, $http) {
   $scope.loading = true;
   $scope.mylists = [];
 
-  $http.get('/guestlist/mylists')
+  $http.get('/api/list/get')
     .then(function(response) {
       $scope.mylists = response.data;
       $scope.loading = false;
@@ -14,7 +20,7 @@ p.controller('myGuestlists', ['$scope', '$http', function($scope, $http) {
   $scope.fd = {};
   $scope.processForm = function() {
     $scope.loading = true;
-    $http.post('/guestlist/create', $scope.fd)
+    $http.post('/api/list/create', $scope.fd)
       .success(function(data) {
         $scope.mylists.push({
           name: $scope.fd.name,
@@ -31,5 +37,30 @@ p.controller('myGuestlists', ['$scope', '$http', function($scope, $http) {
         $scope.fd = null;
         $scope.loading = false;
       });
+  };
+}]);
+
+p.controller('attendees', ['$scope', '$http', function($scope, $http) {
+  $scope.attendees = [];
+  $scope.att = {};
+  $scope.id = null;
+
+  $scope.init = function(id) {
+    $scope.id = id;
+    $http.get('/api/attendees/' + id).then(function(response) {
+      $scope.attendees = response.data;
+    });
+  };
+
+  $scope.enterGuest = function(listId) {
+    $scope.att.listId = listId;
+    $scope.att.email = $scope.attendee.email;
+    $scope.att.name = $scope.attendee.name;
+    $http.post('/api/attendees/add', $scope.att).then(function(response) {
+      $scope.attendees.push({
+        name: $scope.attendee.name,
+        email: $scope.attendee.email
+      });
+    });
   };
 }]);

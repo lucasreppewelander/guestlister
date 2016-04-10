@@ -2,4 +2,32 @@ extends ../layout
 
 block content
   h1= title
+  .row(ng-controller='attendees')
+    .col-sm-7(ng-init='init("#{guestlist._id}")')
+      h3 Guests
+      p.small.ng-cloak Total: {{ attendees.length }}
+      ul
+        li(ng-repeat='guest in attendees')
+          span.name.ng-cloak {{ guest.name }}
+      h3 URL to check off attendees
+      a(href='http://localhost:3000/event/{{ id }}/live') http://localhost:3000/event/{{ id }}/live
+    .col-sm-5
+      h3 Send email invites
+      p.ng-cloak {{ id }}
+      form
+        .form-group
+          label Email
+          textarea.form-control(name='email-list', placeholder='Press space between email adresses to add more.')
+        .form-group
+          button.btn.btn-success Send invites
+      h3 Manually enter guests
+      form
+        .form-group
+          label Name
+          input.form-control(type='text', name='attendee-name', ng-model='attendee.name')
+        .form-group
+          label Email
+          input.form-control(type='text', name='attendee-email', ng-model='attendee.email')
+        .form-group
+          button.btn.btn-success(ng-click='enterGuest(id)') Enter guest
   pre= guestlist

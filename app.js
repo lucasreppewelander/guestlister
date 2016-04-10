@@ -26,7 +26,9 @@ var routes = require('./routes/index'),
     users = require('./routes/users'),
     guestlist = require('./routes/guestlist'),
     auth = require('./routes/auth'),
-    inside = require('./routes/inside');
+    inside = require('./routes/inside'),
+    api = require('./routes/api'),
+    event = require('./routes/event');
 
 var app = express();
 var server = http.Server(app);
@@ -97,7 +99,9 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/guestlist', guestlist);
 app.use('/auth', auth);
+app.use('/api', passportConfig.isAuthenticated, api);
 app.use('/inside', passportConfig.isAuthenticated, inside);
+app.use('/event', passportConfig.isAuthenticated, event);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

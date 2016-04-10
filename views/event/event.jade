@@ -1,0 +1,29 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    title= title
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='robots', content='noindex,nofollow')
+    link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body(ng-app='event')
+    .row(ng-controller='rsvp', ng-init='init("#{gid}")')
+      .col-sm-12
+        h1 Guestlist
+        p.count {{ count }}
+        p.bg-info(ng-if='howManyIsHere === count') EVERYONE IS HERE!
+        input.form-control(type='text', ng-model='query', placeholder='Find by name')
+        ul
+          li(ng-repeat='guest in attendees | filter : query | orderBy : "arrived" : reverse ')
+            span.name.ng-cloak {{ guest.name }}
+            span.btn.btn-xs.btn-success(ng-click='checkAttendee(guest)', ng-if='guest.arrived == false')
+              span.glyphicon.glyphicon-ok
+              | Check off
+            span.btn.btn-xs.btn-danger(ng-click='checkAttendee(guest)', ng-if='guest.arrived == true')
+              span.glyphicon.glyphicon-remove
+              | Arrived
+    
+    script(src='/bower_components/angular/angular.js')
+    script(src='/controllers/event.js')
