@@ -7,7 +7,12 @@ var guestlistSchema = new mongoose.Schema({
     name: String,
     email: String,
     signup: { type: Date, default: Date.now },
-    arrived: { type: Boolean, default: false }
+    arrived: { type: Boolean, default: false },
+    tickets: {
+      total: { type: Number, default: 1 },
+      used: { type: Number, default: 0 },
+      left: { type: Number, default: 0 }
+    }
   }],
   owner: mongoose.Schema.ObjectId
 }, { timestamps: true });

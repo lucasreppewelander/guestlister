@@ -16,8 +16,30 @@ angular.module('event', [])
             $scope.howManyIsHere++;
           }
         });
-        console.log(" inside init : " + $scope.howManyIsHere);
       });
+    };
+    
+    $scope.getTotalAttending = function() {
+      var total = 0;
+      for(var i = 0; i < $scope.attendees.length; i++){
+          var tick = $scope.attendees[i].tickets;
+          total += (tick.total);
+      }
+      $scope.count = total;
+      return total;
+    };
+    
+    $scope.getTotalArrived= function() {
+      var total = 0;
+      for(var i = 0; i < $scope.attendees.length; i++){
+        console.log($scope.attendees[i].arrived);
+        if ($scope.attendees[i].arrived === true) {
+          var tick = $scope.attendees[i].tickets;
+          total += (tick.total);
+        }
+      }
+      $scope.count = total;
+      return total;
     };
 
     $scope.checkAttendee = function(g) {
@@ -33,6 +55,8 @@ angular.module('event', [])
       });
     };
 
-
+    $scope.getGuestInfo = function(g) {
+      $scope.user = g;
+    };
 
   }]);

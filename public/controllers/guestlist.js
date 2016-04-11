@@ -51,15 +51,26 @@ p.controller('attendees', ['$scope', '$http', function($scope, $http) {
       $scope.attendees = response.data;
     });
   };
+  
+  $scope.getTotalAttending = function() {
+    var total = 0;
+    for(var i = 0; i < $scope.attendees.length; i++){
+        var tick = $scope.attendees[i].tickets;
+        total += (tick.total);
+    }
+    return total;
+  };
 
   $scope.enterGuest = function(listId) {
     $scope.att.listId = listId;
     $scope.att.email = $scope.attendee.email;
     $scope.att.name = $scope.attendee.name;
+    $scope.att.tickets = $scope.attendee.tickets;
     $http.post('/api/attendees/add', $scope.att).then(function(response) {
       $scope.attendees.push({
         name: $scope.attendee.name,
-        email: $scope.attendee.email
+        email: $scope.attendee.email,
+        ticket: $scope.attendee.tickets
       });
     });
   };

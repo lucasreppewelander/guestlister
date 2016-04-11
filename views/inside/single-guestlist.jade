@@ -5,10 +5,10 @@ block content
   .row(ng-controller='attendees')
     .col-sm-7(ng-init='init("#{guestlist._id}")')
       h3 Guests
-      p.small.ng-cloak Total: {{ attendees.length }}
+      p.small.ng-cloak Total: {{ getTotalAttending() }}
       ul
         li(ng-repeat='guest in attendees')
-          span.name.ng-cloak {{ guest.name }}
+          span.name.ng-cloak {{ guest.name }} {{ guest.tickets.total }}
       h3 URL to check off attendees
       a(href='http://localhost:3000/event/{{ id }}/live') http://localhost:3000/event/{{ id }}/live
     .col-sm-5
@@ -28,6 +28,9 @@ block content
         .form-group
           label Email
           input.form-control(type='text', name='attendee-email', ng-model='attendee.email')
+        .form-group
+          label {{ attendee.name }} + how many?
+          input.form-control(type='number', name='attendee-number', ng-model='attendee.tickets')
         .form-group
           button.btn.btn-success(ng-click='enterGuest(id)') Enter guest
   pre= guestlist

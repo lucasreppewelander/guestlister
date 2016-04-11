@@ -3,8 +3,8 @@ extends ../layout
 block content
   .page-header
     h3 Sign in
-  form.form-horizontal(method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
+  form.form-horizontal(method='POST', action='/login')
+    input(type='hidden', name='_csrf', value='#{csrf}')
     .form-group
       label.col-sm-3.control-label(for='email') Email
       .col-sm-7
