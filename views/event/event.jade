@@ -24,7 +24,7 @@ html
             span.btn.btn-xs.btn-danger(ng-if='guest.arrived == true')
               span.glyphicon.glyphicon-remove
               | Arrived
-      .col-sm-5(style='position:fixed;right:0;top:0; background: #ddd;')
+      .col-sm-5(style='position:fixed;right:0;top:0; background: #ddd;', ng-show='ShowUser', ng-swipe-right="ShowUser = false")
         h3 Info
         .form-group
           label Name
@@ -47,4 +47,5 @@ html
             | Arrived
     
     script(src='/bower_components/angular/angular.js')
+    script(src='/bower_components/angular-touch/angular-touch.js')
     script(src='/controllers/event.js')

@@ -6,6 +6,7 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
+    "angular-touch": "^1.5.3",
     "async": "^2.0.0-rc.3",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.13.2",

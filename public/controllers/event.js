@@ -1,10 +1,11 @@
-angular.module('event', [])
+angular.module('event', ['ngTouch'])
   .controller('rsvp', ['$scope', '$http', function($scope, $http) {
     $scope.attendees = [];
     $scope.id = null;
     $scope.count = 0;
     $scope.howManyIsHere = 0;
     $scope.everyoneHere = false;
+    $scope.ShowUser = false;
 
     $scope.init = function(id) {
       $scope.id = id;
@@ -56,6 +57,7 @@ angular.module('event', [])
     };
 
     $scope.getGuestInfo = function(g) {
+      $scope.ShowUser = true;
       $scope.user = g;
     };
 
